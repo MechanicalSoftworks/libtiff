@@ -192,7 +192,7 @@ if(tiff-install)
   install(FILES ${tiff_public_HEADERS}
           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 
-  set(TIFF_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/tiff)
+  set(TIFF_CONFIGDIR ${CMAKE_INSTALL_CMAKEDIR}/tiff)
   install(EXPORT TiffTargets
           FILE TiffTargets.cmake
           NAMESPACE TIFF::
