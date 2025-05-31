@@ -463,10 +463,8 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
             v32 = (uint32_t)va_arg(ap, uint32_t);
             if (v32 % 16)
             {
-#ifndef TIFF_ALLOW_NONSTANDARD_TILE_SIZE
                 if (tif->tif_mode != O_RDONLY)
                     goto badvalue32;
-#endif
                 TIFFWarningExtR(
                     tif, tif->tif_name,
                     "Nonstandard tile width %" PRIu32 ", convert file", v32);
@@ -478,10 +476,8 @@ static int _TIFFVSetField(TIFF *tif, uint32_t tag, va_list ap)
             v32 = (uint32_t)va_arg(ap, uint32_t);
             if (v32 % 16)
             {
-#ifndef TIFF_ALLOW_NONSTANDARD_TILE_SIZE
                 if (tif->tif_mode != O_RDONLY)
                     goto badvalue32;
-#endif
                 TIFFWarningExtR(
                     tif, tif->tif_name,
                     "Nonstandard tile length %" PRIu32 ", convert file", v32);
