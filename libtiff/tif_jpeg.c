@@ -2641,6 +2641,8 @@ static int JPEGVGetField(TIFF *tif, uint32_t tag, va_list ap)
     switch (tag)
     {
         case TIFFTAG_JPEGTABLES:
+            if (!sp->otherSettings.jpegtablesmode)
+                return 0;
             *va_arg(ap, uint32_t *) = sp->otherSettings.jpegtables_length;
             *va_arg(ap, const void **) = sp->otherSettings.jpegtables;
             break;

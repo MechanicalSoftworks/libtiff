@@ -28,7 +28,8 @@
 set(JPEG_SUPPORT FALSE)
 find_package(JPEG)
 option(jpeg "use libjpeg (required for JPEG compression)" ${JPEG_FOUND})
-if (jpeg AND JPEG_FOUND)
+if ((jpeg AND JPEG_FOUND) OR (TARGET JPEG::JPEG))
+    set(JPEG_FOUND TRUE)
     set(JPEG_SUPPORT TRUE)
 endif()
 

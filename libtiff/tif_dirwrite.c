@@ -902,8 +902,8 @@ static int TIFFWriteDirectorySec(TIFF *tif, int isimage, int imagedone,
                                 assert(o->field_type == TIFF_UNDEFINED);
                                 assert(o->field_readcount == TIFF_VARIABLE2);
                                 assert(o->field_passcount == 1);
-                                TIFFGetField(tif, o->field_tag, &pa, &pb);
-                                if (!TIFFWriteDirectoryTagUndefinedArray(
+                                if (TIFFGetField(tif, o->field_tag, &pa, &pb) &&
+                                    !TIFFWriteDirectoryTagUndefinedArray(
                                         tif, &ndir, dir, (uint16_t)o->field_tag,
                                         pa, pb))
                                     goto bad;
