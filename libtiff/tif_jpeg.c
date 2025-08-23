@@ -1004,8 +1004,10 @@ JPEGFixupTagsSubsamplingSec(struct JPEGFixupTagsSubsamplingData *data)
                             "compressed data [%" PRIu8 ",%" PRIu8 "]",
                             data->tif->tif_dir.td_ycbcrsubsampling[0],
                             data->tif->tif_dir.td_ycbcrsubsampling[1], ph, pv);
-                        data->tif->tif_dir.td_ycbcrsubsampling[0] = ph;
-                        data->tif->tif_dir.td_ycbcrsubsampling[1] = pv;
+
+                        // MECHSOFT: Allow the user to query this tag.
+                        TIFFSetField(data->tif, TIFFTAG_YCBCRSUBSAMPLING, ph,
+                                     pv);
                     }
                 }
                 return (1);
