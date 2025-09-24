@@ -211,6 +211,7 @@ struct tiff
     TIFFUnmapFileProc tif_unmapproc; /* unmap file method */
     /* input/output callback methods */
     thandle_t tif_clientdata;        /* callback parameter */
+    thandle_t tif_heap;
     TIFFReadWriteProc tif_readproc;  /* read method */
     TIFFReadWriteProc tif_writeproc; /* write method */
     TIFFSeekProc tif_seekproc;       /* lseek method */

@@ -106,7 +106,7 @@ static int TIFFReadAndRealloc(TIFF *tif, tmsize_t size, tmsize_t rawdata_offset,
                 return 0;
             }
             new_rawdata =
-                (uint8_t *)_TIFFrealloc(tif->tif_rawdata, tif->tif_rawdatasize);
+                (uint8_t *)_TIFFrealloc(tif, tif->tif_rawdata, tif->tif_rawdatasize);
             if (new_rawdata == 0)
             {
                 TIFFErrorExtR(tif, module,

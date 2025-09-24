@@ -74,11 +74,11 @@ int _TIFFgetMode(TIFFOpenOptions *opts, thandle_t clientdata, const char *mode,
 TIFFOpenOptions *TIFFOpenOptionsAlloc()
 {
     TIFFOpenOptions *opts =
-        (TIFFOpenOptions *)_TIFFcalloc(1, sizeof(TIFFOpenOptions));
+        (TIFFOpenOptions *)_TIFFcalloc(NULL, 1, sizeof(TIFFOpenOptions));
     return opts;
 }
 
-void TIFFOpenOptionsFree(TIFFOpenOptions *opts) { _TIFFfree(opts); }
+void TIFFOpenOptionsFree(TIFFOpenOptions *opts) { _TIFFfree(NULL, opts); }
 
 /** Define a limit in bytes for a single memory allocation done by libtiff.
  *  If max_single_mem_alloc is set to 0, no other limit that the underlying
@@ -126,7 +126,7 @@ void *_TIFFmallocExt(TIFF *tif, tmsize_t s)
         _TIFFEmitErrorAboveMaxSingleMemAlloc(tif, "_TIFFmallocExt", s);
         return NULL;
     }
-    return _TIFFmalloc(s);
+    return _TIFFmalloc(tif, s);
 }
 
 /** calloc() version that takes into account memory-specific open options */
@@ -143,7 +143,7 @@ void *_TIFFcallocExt(TIFF *tif, tmsize_t nmemb, tmsize_t siz)
             return NULL;
         }
     }
-    return _TIFFcalloc(nmemb, siz);
+    return _TIFFcalloc(tif, nmemb, siz);
 }
 
 /** realloc() version that takes into account memory-specific open options */
@@ -155,14 +155,13 @@ void *_TIFFreallocExt(TIFF *tif, void *p, tmsize_t s)
         _TIFFEmitErrorAboveMaxSingleMemAlloc(tif, "_TIFFreallocExt", s);
         return NULL;
     }
-    return _TIFFrealloc(p, s);
+    return _TIFFrealloc(tif, p, s);
 }
 
 /** free() version that takes into account memory-specific open options */
 void _TIFFfreeExt(TIFF *tif, void *p)
 {
-    (void)tif;
-    _TIFFfree(p);
+    _TIFFfree(tif, p);
 }
 
 TIFF *TIFFClientOpen(const char *name, const char *mode, thandle_t clientdata,
@@ -238,7 +237,19 @@ TIFF *TIFFClientOpenExt(const char *name, const char *mode,
                         "%s: Out of memory (TIFF structure)", name);
         goto bad2;
     }
+
     _TIFFmemset(tif, 0, sizeof(*tif));
+
+#ifdef _WIN32
+    tif->tif_heap = HeapCreate(0, 0, 0);
+    if (tif->tif_heap == NULL)
+    {
+        _TIFFErrorEarly(opts, clientdata, module,
+                        "%s: Out of memory (HeapCreate)", name);
+        goto bad2;
+    }
+#endif
+
     tif->tif_name = (char *)tif + sizeof(TIFF);
     strcpy(tif->tif_name, name);
     tif->tif_mode = m & ~(O_CREAT | O_TRUNC);

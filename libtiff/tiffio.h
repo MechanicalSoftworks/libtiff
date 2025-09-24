@@ -312,13 +312,13 @@ extern "C"
      * Auxiliary functions.
      */
 
-    extern void *_TIFFmalloc(tmsize_t s);
-    extern void *_TIFFcalloc(tmsize_t nmemb, tmsize_t siz);
-    extern void *_TIFFrealloc(void *p, tmsize_t s);
+    extern void *_TIFFmalloc(TIFF *, tmsize_t s);
+    extern void *_TIFFcalloc(TIFF *, tmsize_t nmemb, tmsize_t siz);
+    extern void *_TIFFrealloc(TIFF *, void *p, tmsize_t s);
     extern void _TIFFmemset(void *p, int v, tmsize_t c);
     extern void _TIFFmemcpy(void *d, const void *s, tmsize_t c);
     extern int _TIFFmemcmp(const void *p1, const void *p2, tmsize_t c);
-    extern void _TIFFfree(void *p);
+    extern void _TIFFfree(TIFF *, void *p);
 
     /*
     ** Stuff, related to tag handling and creating custom tags.

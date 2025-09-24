@@ -110,6 +110,10 @@ void TIFFCleanup(TIFF *tif)
         _TIFFfreeExt(tif, tif->tif_fieldscompat);
     }
 
+#ifdef _WIN32
+    HeapDestroy(tif->tif_heap);
+#endif
+
     _TIFFfreeExt(NULL, tif);
 }
 
